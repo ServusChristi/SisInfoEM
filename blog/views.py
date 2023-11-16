@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from blog.models import Post, Comment
 from django.http import HttpResponseRedirect
@@ -24,7 +24,7 @@ def blog_category(request, category):
 
 
 def blog_detail(request, pk):
-    post = Post.objects.get(pk=pk)
+    post = get_object_or_404(Post, pk=pk)  # Modificado para usar get_object_or_404
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -37,6 +37,7 @@ def blog_detail(request, pk):
             return HttpResponseRedirect(request.path_info)
     else:
         form = CommentForm()
+
     comments = Comment.objects.filter(post=post)
     context = {
         "post": post,
@@ -51,7 +52,10 @@ def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            # Primeiro, salva o formulário, mas commit=False diz para não enviar para o banco de dados ainda
+            post = form.save(commit=False)
+            post.save()  # Salva o post no banco de dados
+            form.save_m2m()  # Salva as relações ManyToMany
             return redirect('blog_index')  # Redireciona para a página inicial após o sucesso
     else:
         form = PostForm()
