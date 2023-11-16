@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from blog.models import Post, Comment
 from django.http import HttpResponseRedirect
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
+from django.views.generic.edit import UpdateView
 
 
 def blog_index(request):
@@ -43,3 +45,21 @@ def blog_detail(request, pk):
     }
 
     return render(request, "blog/detail.html", context)
+
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_index')  # Redireciona para a página inicial após o sucesso
+    else:
+        form = PostForm()
+    return render(request, 'blog/create_post.html', {'form': form})
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_edit_form.html'  # Um novo template para edição
+    success_url = reverse_lazy('index')  # Redireciona para a página inicial após o sucesso

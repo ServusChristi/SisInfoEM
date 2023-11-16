@@ -12,6 +12,9 @@
             <a href="{% url 'blog_category' category.name %}">
                 {{ category.name }}
             </a>
+             <div style="text-align: left; margin-bottom: 10px;">
+                <a href="{% url 'update_post' pk=post.pk %}">Editar Postagem</a>
+            </div>
         {% endfor %}
     </small>
     <p>{{ post.body | linebreaks| safe }}</p>
