@@ -1,6 +1,7 @@
 from django import forms
 from .models import Post
 
+
 class CommentForm(forms.Form):
     author = forms.CharField(
         max_length=60,
@@ -18,7 +19,4 @@ class CommentForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'body', 'categories']  # Adicionando 'categories' aos campos
-
-    def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
+        fields = ['title', 'body', 'categories']

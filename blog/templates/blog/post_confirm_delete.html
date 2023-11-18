@@ -1,0 +1,14 @@
+<!-- templates/blog/post_confirm_delete.html -->
+
+{% extends 'base.html' %}
+
+{% block page_title %}Excluir Postagem{% endblock %}
+
+{% block page_content %}
+  <h2>Tem certeza que deseja excluir "{{ object.title }}"?</h2>
+  <form method="post">
+      {% csrf_token %}
+      <button type="submit">Sim, excluir</button>
+      <a href="{% url 'blog_index' %}">Cancelar</a>
+  </form>
+{% endblock %}

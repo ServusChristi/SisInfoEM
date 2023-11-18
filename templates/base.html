@@ -1,18 +1,57 @@
-<!-- templates/base.html -->
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Marinhas pelo Mundo</title>
-        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+        body {
+            text-align: center;
+        }
+        h1 {
+            color: #0966ce;
+            font-family: 'Arial', sans-serif;
+            /* Animação */
+            animation: colorChange 3s infinite;
+        }
+        @keyframes colorChange {
+            0%   {color: #133a69;}
+            50%  {color: #acbbea;}
+            100% {color: #133a69;}
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header img {
+            height: 250px;
+            width: auto;
+            padding: 10px 0;
+        }
+        h1 {
+            color: #133a69;
+            font-family: 'Arial', sans-serif;
+        }
+        .nav-links {
+            display: inline-block;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>Marinhas pelo Mundo</h1>
-<a href="{% url 'blog_index' %}">Início</a>
-<a href="{% url 'create_post' %}">Criar Postagem</a>
-<hr>
-{% block page_title %}{% endblock page_title %}
-{% block page_content %}{% endblock page_content %}
+    <div class="header">
+        <img src="{% static 'images/logo.png' %}" alt="Logo Marinhas pelo Mundo">
+    </div>
+    <h1>Marinhas pelo Mundo</h1>
+    <div class="nav-links">
+        <a href="{% url 'blog_index' %}">Início</a>
+        <a href="{% url 'create_post' %}">Criar Postagem</a>
+    </div>
+    <hr>
+    {% block page_title %}{% endblock page_title %}
+    {% block page_content %}{% endblock page_content %}
 </body>
 </html>

@@ -6,17 +6,29 @@
 {% endblock page_title %}
 
 {% block page_content %}
+     <style>
+        .comment-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+
     <small>
         {{ post.created_on.date }} | Categoria:
         {% for category in post.categories.all %}
             <a href="{% url 'blog_category' category.name %}">
                 {{ category.name }}
             </a>
-             <div style="text-align: left; margin-bottom: 10px;">
-                <a href="{% url 'update_post' pk=post.pk %}">Editar Postagem</a>
-            </div>
         {% endfor %}
     </small>
+    <div style="text-align: left; margin-bottom: 10px;">
+        <a href="{% url 'update_post' pk=post.pk %}">Editar Postagem</a>
+    </div>
+    <a href="{% url 'post_delete' pk=post.pk %}">Excluir Postagem</a>
+
     <p>{{ post.body | linebreaks| safe }}</p>
     <h3>Deixe um Comentário:</h3>
     <form method="post">
@@ -32,11 +44,13 @@
 
     <h3>Comentários:</h3>
     {% for comment in comments %}
+        <div class="comment-box">
         <p>
             Em {{ comment.created_on.date }} <b>{{ comment.author }}</b> disse:
         </p>
         <p>
             {{ comment.body | linebreaks }}
         </p>
+        </div>
     {% endfor %}
 {% endblock page_content %}
