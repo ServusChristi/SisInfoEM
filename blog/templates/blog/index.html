@@ -12,7 +12,7 @@
             <small>
                 {{ post.created_on.date }} | Categoria:
                 {% for category in post.categories.all %}
-                    <a href="{% url 'blog_category' category.name %}">
+                    <a href="{% url 'blog_category' category.name %}" style="margin-right: 10px;">
                         {{ category.name }}
                     </a>
                 {% endfor %}
