@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{% endblock %}
+
+{% block page_content %}
+    <h2>Todas as Categorias</h2>
+    <ul>
+        {% for category in object_list %}
+            <li><a href="{% url 'blog_category' category.name %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

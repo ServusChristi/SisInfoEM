@@ -1,6 +1,7 @@
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
-from blog.models import Post, Comment
+from blog.models import Post, Comment, Category
 from .forms import CommentForm, PostForm
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 
@@ -10,6 +11,11 @@ class BlogIndexView(ListView):
     template_name = 'blog/index.html'  # Caminho do template para a lista de posts
     context_object_name = 'posts'  # Nome do contexto a ser usado no template
     ordering = ['-created_on']  # Ordem dos posts
+
+
+class AllCategoriesListView(ListView):
+    model = Category
+    template_name = 'blog/all_categories.html'
 
 
 class CategoryListView(ListView):
@@ -32,9 +38,23 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(post=self.object)
+        context['comments'] = Comment.objects.filter(post=self.object).order_by('-created_on')
         context['form'] = CommentForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = self.object
+            comment.author = request.user  # Atribuir o usuário, se necessário
+            comment.save()
+            return redirect('blog_detail', pk=self.object.pk)
+
+        context = self.get_context_data(object=self.object, form=form)
+        return self.render_to_response(context)
 
 
 class PostCreateView(CreateView):
